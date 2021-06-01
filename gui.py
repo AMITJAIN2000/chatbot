@@ -14,6 +14,11 @@ import threading
 saved_username = ["You"]
 # ans=["PyBot"]
 window_size = "400x400"
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[1].id)
+engine.setProperty("rate", 150)
+
 
 
 class ChatInterface(Frame):
@@ -37,7 +42,9 @@ class ChatInterface(Frame):
         menu.add_cascade(label="File", menu=file)
         # file.add_command(label="Save Chat Log", command=self.save_chat)
         file.add_command(label="Clear Chat", command=self.clear_chat)
-        #  file.add_separator()
+        #file.add_command(label="Save", command=self.savechat)
+        file.add_separator()
+
         file.add_command(label="Exit", command=self.chatexit)
 
         # Options
@@ -101,7 +108,7 @@ class ChatInterface(Frame):
         self.send_button_frame.pack(fill=BOTH)
 
         # send button
-        self.send_button = Button(self.send_button_frame, text="Send", width=5, relief=GROOVE, bg='white',
+        self.send_button = Button(self.send_button_frame, text="Send", width=5, relief=RAISED, bg='white',
                                   bd=1, command=lambda: self.send_message_insert(None), activebackground="#FFFFFF",
                                   activeforeground="#000000")
         self.send_button.pack(side=LEFT, ipady=8)
@@ -112,9 +119,7 @@ class ChatInterface(Frame):
         # t2.start()
 
     def playResponce(self, responce):
-        engine = pyttsx3.init()
-        voices = engine.getProperty('voices')
-        engine.setProperty('voice', voices[1].id)
+
         engine.say(responce)
         engine.runAndWait()
         # x = pyttsx3.init()
@@ -148,6 +153,7 @@ class ChatInterface(Frame):
         self.text_box.delete(1.0, END)
         self.text_box.config(state=DISABLED)
 
+
     def chatexit(self):
         exit()
 
@@ -156,11 +162,15 @@ class ChatInterface(Frame):
                                     'PyBOT is a chatbot for answering python queries\nIt is based on retrival-based NLP using pythons NLTK tool-kit module\nGUI is based on Tkinter\nIt can answer questions regarding python language for new learners')
 
     def about(self):
-        tkinter.messagebox.showinfo("PyBOT Developers", "1.Amit jain\n2.Prakhar Saki\n3.Praveen Sharma")
+        tkinter.messagebox.showinfo("PyBOT Developers", " (18100BTCSE02661)Amit jain\n (18100BTCSE02713)Prakhar Saki\n (18100BTCSE02716)Praveen Sharma")
 
     def send_message_insert(self, message):
+        f=open("save.txt","a")
         user_input = self.entry_field.get()
         pr1 = "Human : " + user_input + "\n"
+        f.write("Human:-")
+        f.write(user_input)
+        f.write("\n")
         self.text_box.configure(state=NORMAL)
         self.text_box.insert(END, pr1)
         self.text_box.configure(state=DISABLED)
@@ -170,6 +180,9 @@ class ChatInterface(Frame):
         # time.sleep(1)
         result = chat(user_input)
         pr = "PyBot : " + result + "\n"
+        f.write("Pybot:-")
+        f.write(result)
+        f.write("\n")
         self.text_box.configure(state=NORMAL)
         self.text_box.insert(END,pr)
         self.text_box.configure(state=DISABLED)
