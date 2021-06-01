@@ -1,23 +1,17 @@
 from tkinter import *
 import time
 import tkinter.messagebox
-
-import main
-from basics import chat
+import random
+from basics import chat,Introduce_Ans
 import pyttsx3
 import threading
+import tkinter. font as font
 
-# engine = pyttsx3.init()
-# voices=engine.getProperty('voices')
-# engine.setProperty('voice', voices[1].id)
-
-saved_username = ["You"]
-# ans=["PyBot"]
 window_size = "400x400"
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
-engine.setProperty("rate", 150)
+engine.setProperty("rate", 175)
 
 
 
@@ -31,7 +25,7 @@ class ChatInterface(Frame):
         self.tl_bg = "#EEEEEE"
         self.tl_bg2 = "#EEEEEE"
         self.tl_fg = "#000000"
-        self.font = "Verdana 10"
+        self.font = "Verdana 100"
 
         menu = Menu(self.master)
         self.master.config(menu=menu, bd=5)
@@ -44,14 +38,12 @@ class ChatInterface(Frame):
         file.add_command(label="Clear Chat", command=self.clear_chat)
         #file.add_command(label="Save", command=self.savechat)
         file.add_separator()
-
-        file.add_command(label="Exit", command=self.chatexit)
+        file.add_command(label="Exit",activebackground="red",command=self.chatexit)
 
         # Options
         options = Menu(menu, tearoff=0)
         menu.add_cascade(label="Options", menu=options)
 
-        # username
 
         # font
         font = Menu(options, tearoff=0)
@@ -78,7 +70,7 @@ class ChatInterface(Frame):
         menu.add_cascade(label="Help", menu=help_option)
         # help_option.add_command(label="Features", command=self.features_msg)
         help_option.add_command(label="About PyBot", command=self.msg)
-        help_option.add_command(label="Develpoers", command=self.about)
+        help_option.add_command(label="Developers", command=self.about)
 
         self.text_frame = Frame(self.master, bd=6)
         self.text_frame.pack(expand=True, fill=BOTH)
@@ -101,40 +93,30 @@ class ChatInterface(Frame):
         # entry field
         self.entry_field = Entry(self.entry_frame, bd=1, justify=LEFT)
         self.entry_field.pack(fill=X, padx=6, pady=6, ipady=3)
+        self.text_box.configure(state=NORMAL)
+        self.text_box.insert(END,random.choice(Introduce_Ans)+"\n")
+        self.text_box.configure(state=DISABLED)
+        self.text_box.see(END)
+
         # self.users_message = self.entry_field.get()
 
         # frame containing send button and emoji button
         self.send_button_frame = Frame(self.master, bd=0)
         self.send_button_frame.pack(fill=BOTH)
-
         # send button
         self.send_button = Button(self.send_button_frame, text="Send", width=5, relief=RAISED, bg='white',
                                   bd=1, command=lambda: self.send_message_insert(None), activebackground="#FFFFFF",
                                   activeforeground="#000000")
         self.send_button.pack(side=LEFT, ipady=8)
         self.master.bind("<Return>", self.send_message_insert)
-
         self.last_sent_label(date="No messages sent.")
-        # t2 = threading.Thread(target=self.send_message_insert(, name='t1')
-        # t2.start()
+
 
     def playResponce(self, responce):
 
         engine.say(responce)
         engine.runAndWait()
-        # x = pyttsx3.init()
-        # # print(responce)
-        # li = []
-        # if len(responce) > 100:
-        #     if responce.find('--') == -1:
-        #         b = responce.split('--')
-        #         # print(b)
-        #
-        # x.setProperty('rate', 120)
-        # x.setProperty('volume', 100)
-        # x.say(responce)
-        # x.runAndWait()
-    #     # print("Played Successfully......")
+
 
     def last_sent_label(self, date):
 
@@ -162,15 +144,16 @@ class ChatInterface(Frame):
                                     'PyBOT is a chatbot for answering python queries\nIt is based on retrival-based NLP using pythons NLTK tool-kit module\nGUI is based on Tkinter\nIt can answer questions regarding python language for new learners')
 
     def about(self):
-        tkinter.messagebox.showinfo("PyBOT Developers", " (18100BTCSE02661)Amit jain\n (18100BTCSE02713)Prakhar Saki\n (18100BTCSE02716)Praveen Sharma")
+        # tkinter.messagebox.showinfo = Text(self.text_frame, yscrollcommand=self.text_box_scrollbar.set, state=DISABLED,
+        #                      bd=1, padx=6, pady=6, spacing3=8, wrap=WORD, bg=None, font="Verdana 20", relief=GROOVE,
+        #                      width=10, height=1)
+        tkinter.messagebox.showinfo("PyBOT Developers", " (18100BTCSE02661)\n Amit jain\n (18100BTCSE02713)\n Prakhar Saki\n (18100BTCSE02716)\n Praveen Sharma")
+
 
     def send_message_insert(self, message):
-        f=open("save.txt","a")
         user_input = self.entry_field.get()
         pr1 = "Human : " + user_input + "\n"
-        f.write("Human:-")
-        f.write(user_input)
-        f.write("\n")
+        f.write(pr1)
         self.text_box.configure(state=NORMAL)
         self.text_box.insert(END, pr1)
         self.text_box.configure(state=DISABLED)
@@ -180,9 +163,7 @@ class ChatInterface(Frame):
         # time.sleep(1)
         result = chat(user_input)
         pr = "PyBot : " + result + "\n"
-        f.write("Pybot:-")
-        f.write(result)
-        f.write("\n")
+        f.write(pr)
         self.text_box.configure(state=NORMAL)
         self.text_box.insert(END,pr)
         self.text_box.configure(state=DISABLED)
@@ -343,4 +324,6 @@ a = ChatInterface(root)
 root.geometry(window_size)
 root.title("PyBot")
 root.iconbitmap('i.ico')
+f=open(f"save {((time.strftime('%B %d, %Y' + ' at ' + '%I-%M-%p')))}.txt","a+",encoding='UTF8')
 root.mainloop()
+f.close()
