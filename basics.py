@@ -5,10 +5,8 @@ import warnings
 import wikipedia
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-
 warnings.filterwarnings("ignore")
-import numpy as np
+
 import random
 import string
 
@@ -53,13 +51,7 @@ Basic_Om = ("what is module", "what is module.", "what is module ", "what is mod
 Basic_AnsM = ["Consider a module to be the same as a code library.",
               "A file containing a set of functions you want to include in your application.",
               "A module can define functions, classes and variables. A module can also include runnable code. Grouping related code into a module makes the code easier to understand and use."]
-Basic_R = ("who", "who is your mam")
-Basic_AnsR = ["i am rupali bhartiya", "my rupali bhartiya"]
-query = ("salman khan wikipedia")
-bro = ("youtube")
 
-
-# query_1= wikipedia.summary(query,sentences=2)
 # Checking for greetings
 def greeting(sentence):
     """If user's input is a greeting, return a greeting response"""
@@ -82,20 +74,9 @@ def basicM(sentence):
         if sentence.lower() == word:
             return random.choice(Basic_AnsM)
 
-
-# Checking for Basic_R
-def basicR(sentence):
-    """If user's input is a greeting, return a greeting response"""
-    for word in Basic_R:
-        if sentence.lower() == word:
-            return random.choice(Basic_AnsR)
-
-
+#introduction
 def IntroduceMe(sentence):
     return random.choice(Introduce_Ans)
-
-
-
 
 # Generating response
 def response(user_response):
@@ -117,16 +98,14 @@ def response(user_response):
                 result=f"{user_response} is not found in data base"
         return result
 
-
+#chat function
 def chat(user_response):
-
+    user_response=user_response.lower()
     if (user_response != 'bye'):
         if (user_response == 'thanks' or user_response == 'thank you'):
             return "You are welcome.."
         elif (basicM(user_response) != None):
             return basicM(user_response)
-        elif (basicR(user_response) != None):
-            return basicR(user_response)
         else:
             if (greeting(user_response) != None):
                 return greeting(user_response)
@@ -137,8 +116,6 @@ def chat(user_response):
             elif (basic(user_response) != None):
                 return basic(user_response)
             else:
-                # print("ROBO: ",end="")
-                # print(response(user_response))
                 return response(user_response)
 
     else:
